@@ -14,31 +14,24 @@ export const postApi = createApi({
         method: "GET",
       }),
     }),
-    getPostById: builder.query({
-      query: (id) => {
-        console.log("ID:", id);
-        return {
-          url: `posts/${id}`, //fetch data with id
-          method: "GET",
-        };
-      },
-    }),
-    getPostByLimit: builder.query({
-      query: (num) => {
-        console.log("Limit Number:", num);
-        return {
-          url: `posts?_limit=${num}`, //fetch data with limit
-          method: "GET",
-        };
-      },
-    }),
   }),
 });
 
+export const secondApi = createApi({
+  reducerPath: "secondApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://jsonplaceholder.typicode.com/",
+  }),
+  endpoints: (builder) => ({
+    getAllPosts: builder.query({
+      query: () => ({
+        url: "posts",
+        method: "GET",
+      }),
+    }),
+  }),
+});
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {
-  useGetAllPostQuery,
-  useGetPostByIdQuery,
-  useGetPostByLimitQuery,
-} = postApi;
+export const { useGetAllPostQuery } = postApi;
+export const { useGetAllPostsQuery } = secondApi;
