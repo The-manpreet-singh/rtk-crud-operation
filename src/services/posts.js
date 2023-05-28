@@ -15,6 +15,12 @@ export const postApi = createApi({
         method: "GET",
       }),
       providesTags: ["Posts"],
+      // transformResponse: (response) => {
+      //   console.log("data:", response);
+      //   return {
+      //     response,
+      //   };
+      // }, //this is for response
     }),
     createPost: builder.mutation({
       query: (newPost) => {
