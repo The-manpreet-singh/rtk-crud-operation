@@ -5,13 +5,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const postApi = createApi({
   reducerPath: "postApi", // unique key to define where a cache is store in redux
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3600/", //fetchBaseQuery:-fetch wrapper which is automatically handles the request headers and response parsing same as axios
+    baseUrl: " https://api.instantwebtools.net/v1", //fetchBaseQuery:-fetch wrapper which is automatically handles the request headers and response parsing same as axios
+    tagTypes: ["Posts"],
   }),
   endpoints: (builder) => ({
     getAllPost: builder.query({
-      query: () => ({
-        url: "posts",
+      query: (page = 1) => ({
+        url: `passenger?page=${page}&size=10`,
         method: "GET",
+        providesTags: ["Posts"],
       }),
     }),
   }),

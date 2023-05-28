@@ -1,30 +1,44 @@
 //import "./App.css";
+import { useState } from "react";
 import { useGetAllPostQuery } from "./services/posts";
 
 function App() {
   // Get all data
-  //const responseInfo = useGetAllPostQuery();
-  //console.log("data", responseInfo);
-  const { data, isError, isLoading, isFetching, isSuccess } =
-    useGetAllPostQuery();
+  const [page, setPage] = useState(1);
+  const { data, totalPages, isLoading, isFetching, isSuccess, isError } =
+    useGetAllPostQuery(page);
+  // console.log(data);
+
+  if (isLoading) return <div>loading...</div>;
+  if (isError) return <div>oh no, an error!</div>;
+
   return (
     <>
       <div>
         <h2>RTK Query (Get all data)</h2>
-        {isLoading && <h2>...Loading</h2>}
-        {isFetching && <h2>...Fetching</h2>}
-        {isError && <h2>something went wrong</h2>}
         {isSuccess &&
           // get all data
-          data.map((post) => (
-            <div key={post.id}>
-              <h2>
-                {post.id} {post.title}
-              </h2>
-              <p>{post.body}</p>
+          data.data.map((post) => (
+            <div key={post._id}>
+              <h4>{post._id}</h4>
+              <p>{post.name}</p>
+              <p>{post.trips}</p>
               <hr />
             </div>
           ))}
+        <button
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
+        <div> {`${page} / ${data.totalPages}`}</div>
       </div>
     </>
   );
