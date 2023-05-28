@@ -5,9 +5,8 @@ import { useGetAllPostQuery } from "./services/posts";
 function App() {
   // Get all data
   const [page, setPage] = useState(1);
-  const { data, totalPages, isLoading, isFetching, isSuccess, isError } =
-    useGetAllPostQuery(page);
-  // console.log(data);
+  const { data, isLoading, isSuccess, isError } = useGetAllPostQuery(page);
+  //console.log(data);
 
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>oh no, an error!</div>;
@@ -34,7 +33,7 @@ function App() {
         </button>
         <button
           onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === totalPages}
+          disabled={page === data.totalPages}
         >
           Next
         </button>
