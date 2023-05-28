@@ -1,12 +1,38 @@
 //import "./App.css";
-import { useState } from "react";
-import { useGetAllPostQuery } from "./services/posts";
+import { useCallback, useState, useEffect } from "react";
+import { useGetAllPostQuery, usePrefetch } from "./services/posts";
 
 function App() {
   // Get all data
   const [page, setPage] = useState(1);
+
+  const [hasPrefetchedAll, setHasPrefetchedAll] = useState(false); //for automatic prfetch data for all next page
+
   const { data, isLoading, isSuccess, isError } = useGetAllPostQuery(page);
-  //console.log(data);
+
+  const prefetchPage = usePrefetch("getAllPost");
+  //console.log(data?.totalPages);
+  const prefetchNext = useCallback(() => {
+    prefetchPage(page + 1);
+  }, [prefetchPage, page]);
+
+  useEffect(() => {
+    if (page !== data?.totalPages) {
+      prefetchNext();
+    }
+  }, [data, page, prefetchNext]); //for automatic prfetch data for next page
+
+  // useEffect(() => {
+  //   if (!hasPrefetchedAll) {
+  //     if (data && data.totalPages > 1) {
+  //       [...new Array(data.totalPages)].forEach((page, index) => {
+  //         if (index >= data.totalPages) return;
+  //         prefetchPage(index + 1, { force: true });
+  //       });
+  //       setHasPrefetchedAll(true);
+  //     }
+  //   }
+  // }, [data, page, prefetchPage, hasPrefetchedAll]); //for automatic prfetch data for all next page
 
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>oh no, an error!</div>;
@@ -33,6 +59,7 @@ function App() {
         </button>
         <button
           onClick={() => setPage((prev) => prev + 1)}
+          onMouseEnter={prefetchNext}
           disabled={page === data.totalPages}
         >
           Next
