@@ -13,6 +13,15 @@ export const postApi = createApi({
         url: "posts",
         method: "GET",
       }),
+      // transformResponse: (response) => {
+      //   console.log("transform response", response);
+      //   return response;
+      // },
+      // // Pick out errors and prevent nested properties in a hook or selector
+      // transformErrorResponse: (response, meta, arg) => {
+      //   console.log("transform status", response.status);
+      //   return response.status;
+      // },
     }),
   }),
 });
