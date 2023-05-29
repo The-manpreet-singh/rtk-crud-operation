@@ -5,8 +5,13 @@ import { useGetAllPostQuery } from "./services/posts";
 function App() {
   // Get all data
   const [page, setPage] = useState(1);
-  const { data, isLoading, isSuccess, isError } = useGetAllPostQuery(page);
-  //console.log(data);
+  const {
+    data: posts,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetAllPostQuery(page);
+  console.log(posts);
 
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>oh no, an error!</div>;
@@ -17,7 +22,7 @@ function App() {
         <h2>RTK Query (Get all data)</h2>
         {isSuccess &&
           // get all data
-          data.data.map((post) => (
+          posts.data.map((post) => (
             <div key={post._id}>
               <h4>{post._id}</h4>
               <p>{post.name}</p>
@@ -33,11 +38,11 @@ function App() {
         </button>
         <button
           onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === data.totalPages}
+          disabled={page === posts.totalPages}
         >
           Next
         </button>
-        <div> {`${page} / ${data.totalPages}`}</div>
+        <div> {`${page} / ${posts.totalPages}`}</div>
       </div>
     </>
   );
